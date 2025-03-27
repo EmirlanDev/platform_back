@@ -15,10 +15,11 @@ const swaggerOptions = {
       {
         url: "http://localhost:5000",
       },
+      {
+        url: "https://platform-back-qgul.onrender.com/",
+      },
     ],
   },
-  // Важно: путь указывается относительно корня проекта,
-  // либо укажи абсолютный путь
   apis: [
     "./src/modules/auth/*.ts",
     "./src/modules/user/*.ts",
