@@ -6,17 +6,29 @@ import uploadRoutes from "../modules/upload/upload.routes";
 
 const router = Router();
 
+const origins = [
+  "http://localhost:3000",
+  "http://localhost:5000",
+  "https://platform-back-qgul.onrender.com",
+];
+
 const corsConfig = {
-  origin: [
-    "http://localhost:3000",
-    "http://localhost:5000",
-    "https://platform-back-qgul.onrender.com",
-  ],
+  origin: (origin, callback) => {
+    if (!origin || origins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-router.use("/auth", cors(corsConfig), authRoutes);
-router.use("/user", cors(corsConfig), userRoutes);
-router.use("/file", cors(corsConfig), uploadRoutes);
+router.use(cors(corsConfig));
+
+router.use("/auth", authRoutes);
+router.use("/user", userRoutes);
+router.use("/file", uploadRoutes);
 
 export default router;
