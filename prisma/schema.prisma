@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String @id @default(uuid())
+  name           String
+  lastName       String
+  email          String @unique
+  password       String? 
+  photoURL       String? @default("https://i0.wp.com/passivesills.com/wp-content/uploads/2020/06/User-Icon-Grey.png?fit=400%2C400&ssl=1&w=640")
+  provider       String @default("credentials")
+  profession     String @default("")
+  university     String @default("")
+  dateOfBirthDay String @default("")
+  descr          String @default("")
+  bgImage        String @default("https://www.omfif.org/wp-content/uploads/2022/10/ocean-economy-newweb.png")
+  createAt       DateTime @default(now())
+  updateAt       DateTime @updatedAt
+}
