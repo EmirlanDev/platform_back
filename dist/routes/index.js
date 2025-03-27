@@ -13,7 +13,7 @@ const corsConfig = {
     origin: [
         "http://localhost:3000",
         "http://localhost:5000",
-        "https://student-space-x7ra.vercel.app/",
+        "https://platform-back-qgul.onrender.com",
     ],
     credentials: true,
 };
