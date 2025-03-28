@@ -21,8 +21,9 @@ const register = async (req, res) => {
         const token = (0, token_1.default)(user.id, user.email);
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 3600000,
+            secure: true,
+            sameSite: "none",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         res.json({
             message: "Успешный вход",
@@ -43,8 +44,9 @@ const login = async (req, res) => {
         const token = (0, token_1.default)(user.id, user.email);
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 3600000,
+            secure: true,
+            sameSite: "none",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         res.json({
             message: "Успешный вход",

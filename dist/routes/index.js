@@ -11,8 +11,6 @@ const upload_routes_1 = __importDefault(require("../modules/upload/upload.routes
 const router = (0, express_1.Router)();
 const origins = [
     "http://localhost:3000",
-    "http://localhost:5000",
-    "https://platform-back-qgul.onrender.com",
     "https://platform-student-space.vercel.app",
 ];
 const corsConfig = {

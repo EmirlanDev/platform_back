@@ -22,18 +22,18 @@ const buildServer = () => {
 
   server.use(cookieParser());
 
-  server.use(
-    session({
-      secret: process.env.JWT_SECRET!,
-      resave: false,
-      saveUninitialized: true,
-      cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-      },
-    })
-  );
+  // server.use(
+  //   session({
+  //     secret: process.env.JWT_SECRET!,
+  //     resave: false,
+  //     saveUninitialized: true,
+  //     cookie: {
+  //       httpOnly: true,
+  //       secure: process.env.NODE_ENV === "production",
+  //       sameSite: "none",
+  //     },
+  //   })
+  // );
 
   server.use(passport.initialize());
   server.use(passport.session());

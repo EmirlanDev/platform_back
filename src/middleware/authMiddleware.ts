@@ -10,14 +10,17 @@ const authMiddleware = (
   res: Response,
   next: NextFunction
 ): void => {
-  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+  const token =
+    req.cookies["token"] || req.headers.authorization?.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as DecodedToken;
     req.user = decoded.id;
     next();
   } catch (error) {
-    res.status(401).json({ message: "Неверный или истёкший токен" });
+    res.status(401).json({
+      message: "Неверный или истёкший токен",
+    });
   }
 };
 

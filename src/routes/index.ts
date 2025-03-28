@@ -8,8 +8,6 @@ const router = Router();
 
 const origins = [
   "http://localhost:3000",
-  "http://localhost:5000",
-  "https://platform-back-qgul.onrender.com",
   "https://platform-student-space.vercel.app",
 ];
 
