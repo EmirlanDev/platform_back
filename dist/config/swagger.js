@@ -22,6 +22,20 @@ const swaggerOptions = {
                 url: "https://platform-back-qgul.onrender.com/",
             },
         ],
+        components: {
+            securitySchemes: {
+                cookieAuth: {
+                    type: "apiKey",
+                    in: "cookie",
+                    name: "token",
+                },
+            },
+        },
+        security: [
+            {
+                cookieAuth: [],
+            },
+        ],
     },
     apis: [
         "./src/modules/auth/*.ts",

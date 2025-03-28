@@ -10,13 +10,26 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "Документация API для работы с продуктами",
     },
-
     servers: [
       {
         url: "http://localhost:5000",
       },
       {
         url: "https://platform-back-qgul.onrender.com/",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: "apiKey",
+          in: "cookie",
+          name: "token",
+        },
+      },
+    },
+    security: [
+      {
+        cookieAuth: [],
       },
     ],
   },
@@ -26,7 +39,6 @@ const swaggerOptions = {
     "./src/modules/upload/*.ts",
   ],
 };
-
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
 export function setupSwagger(app: Express) {

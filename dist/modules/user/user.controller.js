@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const prisma_1 = __importDefault(require("./../../config/prisma"));
 const getProfile = async (req, res) => {
     try {
-        const userId = req.user;
+        const userId = req.userId;
         if (!userId) {
             return res.status(401).json({ message: "Неавторизованный доступ" });
         }
@@ -19,6 +19,7 @@ const getProfile = async (req, res) => {
         res.json(user);
     }
     catch (error) {
+        console.error("Ошибка в getProfile:", error);
         res.status(500).json({ message: "Ошибка на сервере" });
     }
 };

@@ -5,33 +5,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma_1 = __importDefault(require("./../../config/prisma"));
-const token_1 = __importDefault(require("./../../config/token"));
+const token_1 = require("./../../config/token");
+const COOKIE_OPTIONS = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+};
 const register = async (req, res) => {
     try {
-        const { name, lastName, email, password, photoURL } = req.body;
+        const { name, lastName, email, password } = req.body;
+        const existing = await prisma_1.default.user.findUnique({ where: { email } });
+        if (existing) {
+            return res.status(400).json({ message: "Email уже используется" });
+        }
         const hashedPassword = await bcrypt_1.default.hash(password, 10);
         const user = await prisma_1.default.user.create({
-            data: {
-                name,
-                lastName,
-                password: hashedPassword,
-                email,
-            },
+            data: { name, lastName, email, password: hashedPassword },
         });
-        const token = (0, token_1.default)(user.id, user.email);
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
-        res.json({
-            message: "Успешный вход",
-            token,
-        });
+        const token = (0, token_1.generateToken)(user.id, user.email);
+        res.cookie("token", token, COOKIE_OPTIONS);
+        res.status(201).json({ message: "Успешная регистрация" });
     }
-    catch (error) {
-        res.status(500).json({ error: "Ошибка при регистрации!" });
+    catch (err) {
+        res.status(500).json({ error: "Ошибка при регистрации" });
     }
 };
 const login = async (req, res) => {
@@ -41,28 +38,19 @@ const login = async (req, res) => {
         if (!user || !(await bcrypt_1.default.compare(password, user.password))) {
             return res.status(401).json({ error: "Неверные учетные данные!" });
         }
-        const token = (0, token_1.default)(user.id, user.email);
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
-        res.json({
-            message: "Успешный вход",
-            token,
-        });
+        const token = (0, token_1.generateToken)(user.id, user.email);
+        res.cookie("token", token, COOKIE_OPTIONS);
+        res.json({ message: "Успешный вход" });
     }
     catch (error) {
-        res.status(500).json({ error: "Ошибка входа в систему" });
+        res.status(500).json({ error: "Ошибка при входе" });
     }
 };
 const logout = (req, res) => {
-    req.logOut((err) => {
-        if (err) {
-            res.status(500).json({ error: "Logut не удался" });
-        }
-        res.json({ message: "Выход из системы" });
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
     });
 };
 const editUser = async (req, res) => {
@@ -97,7 +85,6 @@ const editUser = async (req, res) => {
             }
             user.email = email;
         }
-        // Сохраняем обновлённого пользователя
         const updatedUser = await prisma_1.default.user.update({
             where: { id },
             data: {
@@ -112,7 +99,6 @@ const editUser = async (req, res) => {
                 email,
             },
         });
-        // Отправляем успешный ответ с обновлёнными данными
         res.status(200).json({
             message: "Профиль успешно обновлён",
             user: updatedUser,

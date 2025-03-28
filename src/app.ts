@@ -11,16 +11,14 @@ import path from "path";
 const buildServer = () => {
   const server = express();
   server.use(express.json());
+  server.use(cookieParser());
+  setupSwagger(server);
 
   server.get("/", (req, res) => {
     res.status(200).json({
       message: "Platform main",
     });
   });
-
-  setupSwagger(server);
-
-  server.use(cookieParser());
 
   // server.use(
   //   session({
@@ -35,8 +33,8 @@ const buildServer = () => {
   //   })
   // );
 
-  server.use(passport.initialize());
-  server.use(passport.session());
+  // server.use(passport.initialize());
+  // server.use(passport.session());
 
   server.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

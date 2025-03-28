@@ -3,14 +3,14 @@ import prisma from "./../../config/prisma";
 
 const getProfile = async (req: Request, res: Response): Promise<any> => {
   try {
-    const userId = req.user;
+    const userId = req.userId;
 
     if (!userId) {
       return res.status(401).json({ message: "Неавторизованный доступ" });
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: userId as string },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -19,6 +19,7 @@ const getProfile = async (req: Request, res: Response): Promise<any> => {
 
     res.json(user);
   } catch (error) {
+    console.error("Ошибка в getProfile:", error);
     res.status(500).json({ message: "Ошибка на сервере" });
   }
 };

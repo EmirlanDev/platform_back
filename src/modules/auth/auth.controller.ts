@@ -1,71 +1,62 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import prisma from "./../../config/prisma";
-import generateToken from "./../../config/token";
+import { generateToken } from "./../../config/token";
 
-const register = async (req: Request, res: Response) => {
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "none" as const,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
+const register = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { name, lastName, email, password, photoURL } = req.body;
+    const { name, lastName, email, password } = req.body;
+
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      return res.status(400).json({ message: "Email уже используется" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
-      data: {
-        name,
-        lastName,
-        password: hashedPassword,
-        email,
-      },
+      data: { name, lastName, email, password: hashedPassword },
     });
+
     const token = generateToken(user.id, user.email);
+    res.cookie("token", token, COOKIE_OPTIONS);
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    res.json({
-      message: "Успешный вход",
-      token,
-    });
-  } catch (error) {
-    res.status(500).json({ error: "Ошибка при регистрации!" });
+    res.status(201).json({ message: "Успешная регистрация" });
+  } catch (err) {
+    res.status(500).json({ error: "Ошибка при регистрации" });
   }
 };
 
 const login = async (req: Request, res: Response): Promise<any> => {
   try {
     const { email, password } = req.body;
-    const user = await prisma.user.findUnique({ where: { email } });
 
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.password!))) {
       return res.status(401).json({ error: "Неверные учетные данные!" });
     }
 
     const token = generateToken(user.id, user.email);
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("token", token, COOKIE_OPTIONS);
 
-    res.json({
-      message: "Успешный вход",
-      token,
-    });
+    res.json({ message: "Успешный вход" });
   } catch (error) {
-    res.status(500).json({ error: "Ошибка входа в систему" });
+    res.status(500).json({ error: "Ошибка при входе" });
   }
 };
 
 const logout = (req: Request, res: Response) => {
-  req.logOut((err) => {
-    if (err) {
-      res.status(500).json({ error: "Logut не удался" });
-    }
-    res.json({ message: "Выход из системы" });
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
   });
 };
 
@@ -106,7 +97,6 @@ const editUser = async (req: Request, res: Response): Promise<any> => {
       user.email = email;
     }
 
-    // Сохраняем обновлённого пользователя
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
@@ -122,7 +112,6 @@ const editUser = async (req: Request, res: Response): Promise<any> => {
       },
     });
 
-    // Отправляем успешный ответ с обновлёнными данными
     res.status(200).json({
       message: "Профиль успешно обновлён",
       user: updatedUser,
