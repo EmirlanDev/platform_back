@@ -15,14 +15,7 @@ const origins = [
     "https://platform-back-qgul.onrender.com",
 ];
 const corsConfig = {
-    origin: (origin, callback) => {
-        if (!origin || origins.includes(origin)) {
-            callback(null, true);
-        }
-        else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
+    origin: ["http://localhost:3000"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
