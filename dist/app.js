@@ -26,6 +26,11 @@ const buildServer = () => {
         secret: process.env.JWT_SECRET,
         resave: false,
         saveUninitialized: true,
+        cookie: {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "none",
+        },
     }));
     server.use(passport_1.default.initialize());
     server.use(passport_1.default.session());
