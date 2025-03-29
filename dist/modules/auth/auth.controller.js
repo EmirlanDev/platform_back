@@ -8,8 +8,8 @@ const prisma_1 = __importDefault(require("./../../config/prisma"));
 const token_1 = require("./../../config/token");
 const COOKIE_OPTIONS = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    // sameSite: "none" as const,
+    secure: true,
+    sameSite: "none",
     maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 const register = async (req, res) => {
