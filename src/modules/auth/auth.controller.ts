@@ -6,7 +6,7 @@ import { generateToken } from "./../../config/token";
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: "none" as const,
+  // sameSite: "none" as const,
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
@@ -80,7 +80,6 @@ const editUser = async (req: Request, res: Response): Promise<any> => {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
 
-    // Обновляем поля пользователя, если они переданы
     if (bgImage) user.bgImage = bgImage;
     if (photoURL) user.photoURL = photoURL;
     if (name) user.name = name;

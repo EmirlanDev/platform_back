@@ -9,9 +9,9 @@ const router = Router();
  * /platform/auth/register:
  *   post:
  *     tags:
- *      - Auth
+ *       - Auth
  *     summary: Регистрация нового пользователя
- *     description: Создает нового пользователя и возвращает JWT токен
+ *     description: Создает нового пользователя и возвращает JWT токен в cookie
  *     requestBody:
  *       required: true
  *       content:
@@ -28,26 +28,18 @@ const router = Router();
  *               password:
  *                 type: string
  *     responses:
- *       200:
+ *       201:
  *         description: Успешная регистрация
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 user:
- *                   type: object
- *                   properties:
- *                     name:
- *                       type: string
- *                     lastName:
- *                       type: string
- *                     email:
- *                       type: string
- *                     photoURL:
- *                       type: string
- *                 token:
+ *                 message:
  *                   type: string
+ *                   example: "Успешная регистрация"
+ *       400:
+ *         description: Email уже используется
  *       500:
  *         description: Ошибка при регистрации
  */
@@ -58,9 +50,9 @@ router.post("/register", authController.register);
  * /platform/auth/login:
  *   post:
  *     tags:
- *      - Auth
+ *       - Auth
  *     summary: Авторизация пользователя
- *     description: Авторизует пользователя и возвращает JWT токен
+ *     description: Авторизует пользователя и возвращает JWT токен в cookie
  *     requestBody:
  *       required: true
  *       content:
@@ -80,19 +72,9 @@ router.post("/register", authController.register);
  *             schema:
  *               type: object
  *               properties:
- *                 user:
- *                   type: object
- *                   properties:
- *                     name:
- *                       type: string
- *                     lastName:
- *                       type: string
- *                     email:
- *                       type: string
- *                     photoURL:
- *                       type: string
- *                 token:
+ *                 message:
  *                   type: string
+ *                   example: "Успешный вход"
  *       401:
  *         description: Неверные учетные данные
  *       500:
@@ -141,7 +123,7 @@ router.post("/logout", authController.logout);
  *     summary: Редактирование профиля пользователя
  *     description: Обновляет информацию о пользователе по его ID. Требуется авторизация.
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -158,32 +140,23 @@ router.post("/logout", authController.logout);
  *             properties:
  *               bgImage:
  *                 type: string
- *                 description: URL фонового изображения профиля
  *               photoURL:
  *                 type: string
- *                 description: URL фото профиля
  *               name:
  *                 type: string
- *                 description: Имя пользователя
  *               lastName:
  *                 type: string
- *                 description: Фамилия пользователя
  *               profession:
  *                 type: string
- *                 description: Профессия пользователя
  *               descr:
  *                 type: string
- *                 description: Краткое описание или биография
  *               university:
  *                 type: string
- *                 description: Название университета
  *               dateOfBirthDay:
  *                 type: string
  *                 format: date
- *                 description: Дата рождения (в формате YYYY-MM-DD)
  *               email:
  *                 type: string
- *                 description: Адрес электронной почты
  *     responses:
  *       200:
  *         description: Профиль успешно обновлён
@@ -195,60 +168,12 @@ router.post("/logout", authController.logout);
  *                 message:
  *                   type: string
  *                   example: "Профиль успешно обновлён"
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     name:
- *                       type: string
- *                     lastName:
- *                       type: string
- *                     email:
- *                       type: string
- *                     photoURL:
- *                       type: string
- *                     bgImage:
- *                       type: string
- *                     profession:
- *                       type: string
- *                     descr:
- *                       type: string
- *                     university:
- *                       type: string
- *                     dateOfBirthDay:
- *                       type: string
- *                       format: date
  *       400:
- *         description: Ошибка валидации (например, email уже используется)
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Email уже используется"
+ *         description: Ошибка валидации
  *       404:
  *         description: Пользователь не найден
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Пользователь не найден"
  *       500:
  *         description: Внутренняя ошибка сервера
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Внутренняя ошибка сервера"
  */
 router.put("/edit/:id", authMiddleware, authController.editUser);
 

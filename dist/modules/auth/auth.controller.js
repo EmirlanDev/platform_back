@@ -9,7 +9,7 @@ const token_1 = require("./../../config/token");
 const COOKIE_OPTIONS = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    // sameSite: "none" as const,
     maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 const register = async (req, res) => {
@@ -61,7 +61,6 @@ const editUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "Пользователь не найден" });
         }
-        // Обновляем поля пользователя, если они переданы
         if (bgImage)
             user.bgImage = bgImage;
         if (photoURL)

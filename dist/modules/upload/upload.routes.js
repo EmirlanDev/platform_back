@@ -17,7 +17,7 @@ const router = (0, express_1.Router)();
  *     summary: Загрузка и обработка изображения
  *     description: Загружает изображение, обрабатывает его (сжимаем и изменяем размер) и возвращает путь к обработанному изображению
  *     security:
- *       - bearerAuth: []
+ *       - cookieAuth: []
  *     requestBody:
  *       content:
  *         multipart/form-data:
@@ -64,7 +64,7 @@ const router = (0, express_1.Router)();
  *                   example: "Ошибка при обработке файла."
  * components:
  *   securitySchemes:
- *     bearerAuth:
+ *     cookieAuth:
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT

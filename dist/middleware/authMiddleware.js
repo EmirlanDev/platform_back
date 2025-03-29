@@ -4,9 +4,6 @@ const token_1 = require("../config/token");
 const authMiddleware = (req, res, next) => {
     try {
         const token = req.cookies.token;
-        if (!token) {
-            res.status(401).json({ message: "Требуется авторизация" });
-        }
         const decoded = (0, token_1.verifyToken)(token);
         req.userId = decoded.id;
         req.userEmail = decoded.email;

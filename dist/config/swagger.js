@@ -31,11 +31,6 @@ const swaggerOptions = {
                 },
             },
         },
-        security: [
-            {
-                cookieAuth: [],
-            },
-        ],
     },
     apis: [
         "./src/modules/auth/*.ts",
@@ -45,6 +40,10 @@ const swaggerOptions = {
 };
 const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerOptions);
 function setupSwagger(app) {
-    app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs));
+    app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs, {
+        swaggerOptions: {
+            withCredentials: true,
+        },
+    }));
     console.log("Swagger UI доступен по адресу: http://localhost:5000/api-docs");
 }
