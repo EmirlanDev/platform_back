@@ -20,20 +20,6 @@ const buildServer = () => {
             message: "Platform main",
         });
     });
-    // server.use(
-    //   session({
-    //     secret: process.env.JWT_SECRET!,
-    //     resave: false,
-    //     saveUninitialized: true,
-    //     cookie: {
-    //       httpOnly: true,
-    //       secure: process.env.NODE_ENV === "production",
-    //       sameSite: "none",
-    //     },
-    //   })
-    // );
-    // server.use(passport.initialize());
-    // server.use(passport.session());
     server.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "uploads")));
     server.use("/platform", routes_1.default);
     return server;

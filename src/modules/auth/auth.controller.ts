@@ -3,12 +3,13 @@ import bcrypt from "bcrypt";
 import prisma from "./../../config/prisma";
 import { generateToken } from "./../../config/token";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: true,
-  sameSite: "none" as const,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000,
-  domain: ".platform-student-space.vercel.app",
 };
 
 const register = async (req: Request, res: Response): Promise<any> => {
@@ -26,7 +27,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
     });
 
     const token = generateToken(user.id, user.email);
-    res.cookie("token", token, COOKIE_OPTIONS);
+    res.cookie("token", token, COOKIE_OPTIONS as any);
 
     res.status(201).json({ message: "Успешная регистрация" });
   } catch (err) {
@@ -45,7 +46,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
 
     const token = generateToken(user.id, user.email);
 
-    res.cookie("token", token, COOKIE_OPTIONS);
+    res.cookie("token", token, COOKIE_OPTIONS as any);
 
     res.json({ message: "Успешный вход" });
   } catch (error) {
@@ -56,8 +57,8 @@ const login = async (req: Request, res: Response): Promise<any> => {
 const logout = (req: Request, res: Response) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: true,
-    sameSite: "none" as const,
+    secure: isProduction,
+    sameSite: isProduction ? ("none" as const) : "lax",
   });
   res.status(200).json({ message: "Выход выполнен успешно" });
 };
