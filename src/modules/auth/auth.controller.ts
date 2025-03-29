@@ -8,6 +8,7 @@ const COOKIE_OPTIONS = {
   secure: true,
   sameSite: "none" as const,
   maxAge: 7 * 24 * 60 * 60 * 1000,
+  domain: ".platform-student-space.vercel.app",
 };
 
 const register = async (req: Request, res: Response): Promise<any> => {
