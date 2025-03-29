@@ -4,20 +4,30 @@ import prisma from "./../../config/prisma";
 const getProfile = async (req: Request, res: Response): Promise<any> => {
   try {
     const userId = req.userId;
-
     if (!userId) {
       return res.status(401).json({ message: "Неавторизованный доступ" });
     }
-
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
-
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
 
-    res.json(user);
+    const remappedUser = {
+      id: user.id,
+      bgImage: user.bgImage,
+      photoURL: user.photoURL,
+      name: user.name,
+      lastName: user.lastName,
+      profession: user.profession,
+      descr: user.descr,
+      dateOfBirthDay: user.dateOfBirthDay,
+      email: user.email,
+      university: user.university,
+    };
+
+    res.json(remappedUser);
   } catch (error) {
     console.error("Ошибка в getProfile:", error);
     res.status(500).json({ message: "Ошибка на сервере" });

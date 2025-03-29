@@ -7,6 +7,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma_1 = __importDefault(require("./../../config/prisma"));
 const token_1 = require("./../../config/token");
 const isProduction = process.env.NODE_ENV === "production";
+// const isProduction = false;
 const COOKIE_OPTIONS = {
     httpOnly: true,
     secure: isProduction,

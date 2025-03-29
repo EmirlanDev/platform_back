@@ -16,7 +16,19 @@ const getProfile = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "Пользователь не найден" });
         }
-        res.json(user);
+        const remappedUser = {
+            id: user.id,
+            bgImage: user.bgImage,
+            photoURL: user.photoURL,
+            name: user.name,
+            lastName: user.lastName,
+            profession: user.profession,
+            descr: user.descr,
+            dateOfBirthDay: user.dateOfBirthDay,
+            email: user.email,
+            university: user.university,
+        };
+        res.json(remappedUser);
     }
     catch (error) {
         console.error("Ошибка в getProfile:", error);
