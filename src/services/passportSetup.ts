@@ -10,6 +10,7 @@ passport.use(
       callbackURL:
         process.env.GOOGLE_CALLBACK_URL ||
         "http://localhost:5000/auth/google/callback",
+      scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
       let user = await prisma.user.findUnique({
