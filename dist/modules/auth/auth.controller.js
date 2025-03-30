@@ -48,6 +48,12 @@ const login = async (req, res) => {
         res.status(500).json({ error: "Ошибка при входе" });
     }
 };
+const signWithGoogle = async (req, res) => {
+    const user = req.user;
+    const token = (0, token_1.generateToken)(user?.id, user?.email);
+    res.cookie("token", token, COOKIE_OPTIONS);
+    res.redirect(`http://localhost:3000/callback`);
+};
 const logout = (req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
@@ -116,4 +122,5 @@ exports.default = {
     login,
     logout,
     editUser,
+    signWithGoogle,
 };

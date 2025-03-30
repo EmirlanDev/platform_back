@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { verifyToken } from "../../config/token";
 import prisma from "./../../config/prisma";
 
 const getProfile = async (req: Request, res: Response): Promise<any> => {
@@ -60,7 +61,23 @@ const getUserById = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
+const checkUser = async (req: Request, res: Response): Promise<any> => {
+  {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: "Пользователь не авторизован" });
+    }
+    try {
+      verifyToken(token);
+      return res.json({ authenticated: true });
+    } catch (err) {
+      return res.json({ authenticated: false });
+    }
+  }
+};
+
 export default {
   getProfile,
   getUserById,
+  checkUser,
 };

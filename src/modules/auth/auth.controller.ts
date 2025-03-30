@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import prisma from "./../../config/prisma";
 import { generateToken } from "./../../config/token";
+import jwt from "jsonwebtoken";
 
 const isProduction = process.env.NODE_ENV === "production";
 // const isProduction = false;
@@ -53,6 +54,16 @@ const login = async (req: Request, res: Response): Promise<any> => {
   } catch (error) {
     res.status(500).json({ error: "Ошибка при входе" });
   }
+};
+
+const signWithGoogle = async (req: Request, res: Response) => {
+  const user = req.user as { id: string; email: string };
+
+  const token = generateToken(user?.id, user?.email);
+
+  res.cookie("token", token, COOKIE_OPTIONS as any);
+
+  res.redirect(`http://localhost:3000/callback`);
 };
 
 const logout = (req: Request, res: Response) => {
@@ -130,4 +141,5 @@ export default {
   login,
   logout,
   editUser,
+  signWithGoogle,
 };

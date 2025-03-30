@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const token_1 = require("../../config/token");
 const prisma_1 = __importDefault(require("./../../config/prisma"));
 const getProfile = async (req, res) => {
     try {
@@ -59,7 +60,23 @@ const getUserById = async (req, res) => {
         return res.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
 };
+const checkUser = async (req, res) => {
+    {
+        const token = req.cookies.token;
+        if (!token) {
+            return res.status(401).json({ message: "Пользователь не авторизован" });
+        }
+        try {
+            (0, token_1.verifyToken)(token);
+            return res.json({ authenticated: true });
+        }
+        catch (err) {
+            return res.json({ authenticated: false });
+        }
+    }
+};
 exports.default = {
     getProfile,
     getUserById,
+    checkUser,
 };

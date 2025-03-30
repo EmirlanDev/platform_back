@@ -4,6 +4,8 @@ import authMiddleware from "./../../middleware/authMiddleware";
 
 const router = Router();
 
+router.get("/check", userController.checkUser);
+
 router.get("/profile", authMiddleware, userController.getProfile);
 
 /**
