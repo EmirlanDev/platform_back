@@ -63,7 +63,7 @@ const signWithGoogle = async (req: Request, res: Response) => {
 
   res.cookie("token", token, COOKIE_OPTIONS as any);
 
-  res.redirect(`http://localhost:3000/callback`);
+  res.redirect(`https://platform-student-space.vercel.app//callback`);
 };
 
 const logout = (req: Request, res: Response) => {
