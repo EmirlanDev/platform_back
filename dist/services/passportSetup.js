@@ -9,7 +9,8 @@ const prisma_1 = __importDefault(require("./../config/prisma"));
 passport_1.default.use(new passport_google_oauth20_1.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://platform-back-qgul.onrender.com/platform/auth/google/callback",
+    callbackURL: process.env.GOOGLE_CALLBACK_URL ||
+        "http://localhost:5000/auth/google/callback",
 }, async (accessToken, refreshToken, profile, done) => {
     let user = await prisma_1.default.user.findUnique({
         where: { email: profile.emails[0].value },
