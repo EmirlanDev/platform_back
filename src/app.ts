@@ -22,7 +22,7 @@ const buildServer = () => {
 
   server.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-  server.use("/platform", router);
+  server.use("/api", router);
   return server;
 };
 

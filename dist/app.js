@@ -23,7 +23,7 @@ const buildServer = () => {
         });
     });
     server.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "uploads")));
-    server.use("/platform", routes_1.default);
+    server.use("/api", routes_1.default);
     return server;
 };
 exports.default = buildServer;
