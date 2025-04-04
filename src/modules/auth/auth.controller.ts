@@ -2,16 +2,14 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import prisma from "./../../config/prisma";
 import { generateToken } from "./../../config/token";
-import jwt from "jsonwebtoken";
 
 const isProduction = process.env.NODE_ENV === "production";
-// const isProduction = false;
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: isProduction,
   sameSite: isProduction ? ("None" as any) : "lax",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
+  maxAge: 10 * 1000,
 };
 
 const register = async (req: Request, res: Response): Promise<any> => {
