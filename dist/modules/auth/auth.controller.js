@@ -11,7 +11,7 @@ const COOKIE_OPTIONS = {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? "None" : "lax",
-    maxAge: 10 * 1000,
+    maxAge: 5 * 60 * 60 * 1000,
 };
 const register = async (req, res) => {
     try {
