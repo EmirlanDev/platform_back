@@ -23,6 +23,9 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt_1.default.hash(password, 10);
         const isAdmin = adminCode.trim() === process.env.NEXT_PUBLIC_IS_ADMIN?.trim();
         console.log(isAdmin);
+        console.log(`adminCode ${adminCode}`);
+        console.log(`isAdmin ${isAdmin}`);
+        console.log(`NEXT_PUBLIC_IS_ADMIN ${process.env.NEXT_PUBLIC_IS_ADMIN}`);
         const user = await prisma_1.default.user.create({
             data: { name, lastName, email, password: hashedPassword },
         });
