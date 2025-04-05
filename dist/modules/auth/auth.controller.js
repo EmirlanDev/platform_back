@@ -15,14 +15,15 @@ const COOKIE_OPTIONS = {
 };
 const register = async (req, res) => {
     try {
-        const { name, lastName, email, password } = req.body;
+        const { name, lastName, email, password, adminCode } = req.body;
         const existing = await prisma_1.default.user.findUnique({ where: { email } });
         if (existing) {
             return res.status(400).json({ message: "Email уже используется" });
         }
         const hashedPassword = await bcrypt_1.default.hash(password, 10);
+        const isAdmin = adminCode === process.env.IS_ADMIN;
         const user = await prisma_1.default.user.create({
-            data: { name, lastName, email, password: hashedPassword },
+            data: { name, lastName, email, password: hashedPassword, isAdmin },
         });
         const token = (0, token_1.generateToken)(user.id, user.email);
         res.cookie("token", token, COOKIE_OPTIONS);

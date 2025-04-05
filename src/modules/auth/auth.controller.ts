@@ -14,7 +14,7 @@ const COOKIE_OPTIONS = {
 
 const register = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { name, lastName, email, password } = req.body;
+    const { name, lastName, email, password, adminCode } = req.body;
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
@@ -22,8 +22,11 @@ const register = async (req: Request, res: Response): Promise<any> => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    const isAdmin = adminCode === process.env.IS_ADMIN;
+
     const user = await prisma.user.create({
-      data: { name, lastName, email, password: hashedPassword },
+      data: { name, lastName, email, password: hashedPassword, isAdmin },
     });
 
     const token = generateToken(user.id, user.email);

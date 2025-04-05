@@ -20,6 +20,7 @@ model User {
   dateOfBirthDay String @default("")
   descr          String @default("")
   bgImage        String @default("https://www.omfif.org/wp-content/uploads/2022/10/ocean-economy-newweb.png")
+  isAdmin        Boolean @default(false)
   createAt       DateTime @default(now())
   updateAt       DateTime @updatedAt
 }
