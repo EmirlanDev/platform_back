@@ -61,7 +61,7 @@ const signWithGoogle = async (req: Request, res: Response) => {
 
   res.cookie("token", token, COOKIE_OPTIONS as any);
 
-  res.redirect(`https://platform-student-space.vercel.app/verification`);
+  res.redirect(`${process.env.GOOGLE_REDIRECT}/verification`);
 };
 
 const logout = (req: Request, res: Response) => {

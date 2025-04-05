@@ -1,34 +1,34 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const sharp_1 = __importDefault(require("sharp"));
 const uploadImage = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: "Файл не был загружен" });
         }
-        const { filename, path: filePath } = req.file;
-        const uploadDir = path_1.default.join(__dirname, "uploads");
-        if (!fs_1.default.existsSync(uploadDir)) {
-            fs_1.default.mkdirSync(uploadDir, { recursive: true });
-        }
-        const processedFilename = `processed_${filename}`;
-        const outputPath = path_1.default.join(uploadDir, processedFilename);
-        await (0, sharp_1.default)(filePath).resize(800).toFile(outputPath);
-        const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${processedFilename}`;
-        res.json({
-            message: "Файл успешно обработан!",
-            processedImagePath: imageUrl,
+        const file = req.file;
+        res.status(200).json({
+            message: "Файл успешно загружен!",
+            url: file.path,
+            public_id: file.filename,
         });
     }
     catch (error) {
-        res.status(500).json({ error: "Ошибка при обработке файла." });
+        res.status(500).json({ error: "Ошибка при загрузке файла." });
     }
 };
+// const deleteImage = async (req: Request, res: Response) => {
+//   const { public_id } = req.body;
+//   try {
+//     const result = await cloudinary.uploader.destroy(public_id);
+//     res.status(200).json({
+//       message: "Файл удалён из Cloudinary.",
+//       result,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: "Ошибка при удалении файла." });
+//   }
+// };
 exports.default = {
     uploadImage,
+    // deleteImage,
 };
