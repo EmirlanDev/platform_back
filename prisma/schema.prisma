@@ -13,6 +13,7 @@ model User {
   lastName       String
   email          String @unique
   password       String? 
+  isAdmin        Boolean @default(false)
   photoURL       String? @default("https://i0.wp.com/passivesills.com/wp-content/uploads/2020/06/User-Icon-Grey.png?fit=400%2C400&ssl=1&w=640")
   provider       String @default("credentials")
   profession     String @default("")
@@ -20,7 +21,6 @@ model User {
   dateOfBirthDay String @default("")
   descr          String @default("")
   bgImage        String @default("https://www.omfif.org/wp-content/uploads/2022/10/ocean-economy-newweb.png")
-  isAdmin        Boolean @default(false)
   createAt       DateTime @default(now())
   updateAt       DateTime @updatedAt
 }
