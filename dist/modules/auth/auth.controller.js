@@ -15,8 +15,8 @@ const COOKIE_OPTIONS = {
 };
 const register = async (req, res) => {
     try {
+        console.log(req);
         const { name, lastName, email, password, adminCode } = req.body;
-        console.log(req.body);
         const existing = await prisma_1.default.user.findUnique({ where: { email } });
         if (existing) {
             return res.status(400).json({ message: "Email уже используется" });
