@@ -23,10 +23,13 @@ const register = async (req: Request, res: Response): Promise<any> => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const isAdmin = adminCode.trim() === process.env.IS_ADMIN?.trim();
+    const isAdmin =
+      adminCode.trim() === process.env.NEXT_PUBLIC_IS_ADMIN?.trim();
+
+    console.log(isAdmin);
 
     const user = await prisma.user.create({
-      data: { name, lastName, email, password: hashedPassword, isAdmin },
+      data: { name, lastName, email, password: hashedPassword },
     });
 
     const token = generateToken(user.id, user.email);
