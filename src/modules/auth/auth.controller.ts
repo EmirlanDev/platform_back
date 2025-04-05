@@ -16,6 +16,8 @@ const register = async (req: Request, res: Response): Promise<any> => {
   try {
     const { name, lastName, email, password, adminCode } = req.body;
 
+    console.log(req.body);
+
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
       return res.status(400).json({ message: "Email уже используется" });
@@ -35,7 +37,6 @@ const register = async (req: Request, res: Response): Promise<any> => {
 
     res.status(201).json({ message: "Успешная регистрация" });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ error: "Ошибка при регистрации" });
   }
 };
