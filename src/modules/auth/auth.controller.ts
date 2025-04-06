@@ -36,6 +36,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
 
     res.status(201).json({ message: "Успешная регистрация" });
   } catch (err) {
+    console.log(`Ошибка при регистрации ${err}`);
     res.status(500).json({ error: "Ошибка при регистрации" });
   }
 };
