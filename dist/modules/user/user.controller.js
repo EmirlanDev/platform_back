@@ -28,6 +28,7 @@ const getProfile = async (req, res) => {
             dateOfBirthDay: user.dateOfBirthDay,
             email: user.email,
             university: user.university,
+            isAdmin: user.isAdmin,
         };
         res.json(remappedUser);
     }

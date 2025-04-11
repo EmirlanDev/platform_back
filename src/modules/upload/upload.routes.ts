@@ -18,6 +18,12 @@ router.post(
   upload.single("image"),
   uploadController.uploadBackgroundImage
 );
-// router.delete("/delete", authMiddleware, uploadController.deleteImage);
+
+router.post(
+  "/upload/news",
+  authMiddleware,
+  upload.single("image"),
+  uploadController.uploadNewsImage
+);
 
 export default router;

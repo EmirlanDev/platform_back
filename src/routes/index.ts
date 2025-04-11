@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from "../modules/auth/auth.routes";
 import userRoutes from "../modules/user/user.routes";
 import uploadRoutes from "../modules/upload/upload.routes";
+import newsRoutes from "../modules/news/news.routes";
 
 const router = Router();
 
@@ -30,5 +31,6 @@ router.use(cors(corsConfig));
 router.use("/auth", authRoutes);
 router.use("/user", userRoutes);
 router.use("/file", uploadRoutes);
+router.use("/news", newsRoutes);
 
 export default router;

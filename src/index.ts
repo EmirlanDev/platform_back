@@ -14,9 +14,6 @@ const start = () => {
       () => {
         console.log(`${new Date()}`);
         console.log(`Server run in: http://localhost:${PORT}`);
-        console.log(
-          `Swagger docs available at http://localhost:${PORT}/api-docs`
-        );
       }
     );
   } catch (error) {

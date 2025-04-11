@@ -10,7 +10,7 @@ router.get("/profile", authMiddleware, userController.getProfile);
 
 /**
  * @swagger
- * /platform/user/{id}:
+ * /api/user/{id}:
  *   get:
  *     tags:
  *       - Users

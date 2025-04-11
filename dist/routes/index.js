@@ -8,6 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const auth_routes_1 = __importDefault(require("../modules/auth/auth.routes"));
 const user_routes_1 = __importDefault(require("../modules/user/user.routes"));
 const upload_routes_1 = __importDefault(require("../modules/upload/upload.routes"));
+const news_routes_1 = __importDefault(require("../modules/news/news.routes"));
 const router = (0, express_1.Router)();
 const origins = [
     "http://localhost:3000",
@@ -31,4 +32,5 @@ router.use((0, cors_1.default)(corsConfig));
 router.use("/auth", auth_routes_1.default);
 router.use("/user", user_routes_1.default);
 router.use("/file", upload_routes_1.default);
+router.use("/news", news_routes_1.default);
 exports.default = router;

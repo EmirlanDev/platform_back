@@ -46,22 +46,30 @@ const uploadBackgroundImage = async (
   }
 };
 
-// const deleteImage = async (req: Request, res: Response) => {
-//   const { public_id } = req.body;
+const uploadNewsImage = async (req: Request, res: Response): Promise<any> => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "Файл не был загружен" });
+    }
 
-//   try {
-//     const result = await cloudinary.uploader.destroy(public_id);
-//     res.status(200).json({
-//       message: "Файл удалён из Cloudinary.",
-//       result,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ error: "Ошибка при удалении файла." });
-//   }
-// };
+    const file = req.file as any;
+
+    const result = await cloudinary.uploader.upload(file.path, {
+      folder: "news",
+    });
+
+    res.status(200).json({
+      message: "Файл изображение успешно загружено!",
+      url: result.secure_url,
+      public_id: result.public_id,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка при загрузке изображения новости." });
+  }
+};
 
 export default {
   uploadImage,
-  // deleteImage,
   uploadBackgroundImage,
+  uploadNewsImage,
 };

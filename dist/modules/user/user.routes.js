@@ -11,7 +11,7 @@ router.get("/check", user_controller_1.default.checkUser);
 router.get("/profile", authMiddleware_1.default, user_controller_1.default.getProfile);
 /**
  * @swagger
- * /platform/user/{id}:
+ * /api/user/{id}:
  *   get:
  *     tags:
  *       - Users

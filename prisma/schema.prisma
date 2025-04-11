@@ -24,3 +24,12 @@ model User {
   createAt       DateTime @default(now())
   updateAt       DateTime @updatedAt
 }
+
+model News {
+  id             String   @id @default(uuid())
+  title          String
+  image          String
+  descriptions   String[] 
+  createdAt      DateTime @default(now())
+  updateAt       DateTime @updatedAt
+}
