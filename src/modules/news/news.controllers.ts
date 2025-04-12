@@ -34,9 +34,9 @@ const getAllNews = async (req: Request, res: Response) => {
 
 const getNewsById = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
-    const oneNews = prisma.news.findUnique({
+    const oneNews = await prisma.news.findUnique({
       where: { id },
     });
 
@@ -44,9 +44,36 @@ const getNewsById = async (req: Request, res: Response): Promise<any> => {
       return res.status(404).json({ message: "Новость не найдена" });
     }
 
-    res.json(oneNews);
+    const remappedOneNews = {
+      id: oneNews.id,
+      image: oneNews.image,
+      title: oneNews.title,
+      descriptions: oneNews.descriptions,
+      createdAt: oneNews.createdAt,
+    };
+
+    res.status(200).json(remappedOneNews);
   } catch (error) {
     res.status(500).json({ message: "Ошибка при получении новости" });
+  }
+};
+
+const updateNews = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { image, title, descriptions } = req.body;
+
+    await prisma.news.update({
+      where: { id },
+      data: {
+        image,
+        title,
+        descriptions,
+      },
+    });
+    res.status(200).json({ message: "Новость успешно обновлена" });
+  } catch (error) {
+    res.status(500).json({ message: "Ошибка при обновлении новости" });
   }
 };
 
@@ -69,4 +96,5 @@ export default {
   getAllNews,
   deleteNews,
   getNewsById,
+  updateNews,
 };

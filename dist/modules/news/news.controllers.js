@@ -34,17 +34,42 @@ const getAllNews = async (req, res) => {
 };
 const getNewsById = async (req, res) => {
     try {
-        const { id } = req.body;
-        const oneNews = prisma_1.default.news.findUnique({
+        const { id } = req.params;
+        const oneNews = await prisma_1.default.news.findUnique({
             where: { id },
         });
         if (!oneNews) {
             return res.status(404).json({ message: "Новость не найдена" });
         }
-        res.json(oneNews);
+        const remappedOneNews = {
+            id: oneNews.id,
+            image: oneNews.image,
+            title: oneNews.title,
+            descriptions: oneNews.descriptions,
+            createdAt: oneNews.createdAt,
+        };
+        res.status(200).json(remappedOneNews);
     }
     catch (error) {
         res.status(500).json({ message: "Ошибка при получении новости" });
+    }
+};
+const updateNews = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { image, title, descriptions } = req.body;
+        await prisma_1.default.news.update({
+            where: { id },
+            data: {
+                image,
+                title,
+                descriptions,
+            },
+        });
+        res.status(200).json({ message: "Новость успешно обновлена" });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Ошибка при обновлении новости" });
     }
 };
 const deleteNews = async (req, res) => {
@@ -64,4 +89,5 @@ exports.default = {
     getAllNews,
     deleteNews,
     getNewsById,
+    updateNews,
 };
